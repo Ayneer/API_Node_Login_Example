@@ -106,7 +106,6 @@ passport.use(new estrategiaLocal({
     usernameField: 'correo',
     passwordField: 'contraseña'
 }, async (correo, contraseña, callBack)=>{
-
     const cliente = await Cliente.findOne({correo: correo});
 
     if(!cliente){

@@ -35,7 +35,7 @@ rutas.post('/ingresar', passport.authenticate('iniciar-sesion',{
 }));
 
 rutas.post('/iniciarSesion', (req, res, next)=>{
-    
+    console.log('llego alguien xD', req.body);
     /* Al usar de esta forma una estrategia de passport,
     SI hay necesidad de llamar al metodo req.logIn() que crea
     por defecto passport, porque de esta forma NO se llama automaticamente. */
@@ -48,16 +48,20 @@ rutas.post('/iniciarSesion', (req, res, next)=>{
                 indica si existe o no un error. */
                 req.logIn(cliente, (err)=>{
                     if(err){
-                        return res.send('error');
+                        console.log('Error xD');
+                        return res.status(404).send({ERROR: true, mensage: "Error #1 en el servidor"});
                     }else{
-                        return res.redirect('/app');
+                        console.log("sesion iniciada!");
+                        return res.status(200).send({ERROR: false, usuario: req.user});
                     }
                 });
             }else{
-                return res.send('Correo o contraseña invalida!');
+                console.log('Error xD 3');
+                return res.status(200).send({ERROR: false, usuario: false, mensage: "Correo o contraseña invalida!"});
             }
         }else{
-            return res.send('err: ', err);
+            console.log('Error xD 2');
+            return res.status(404).send({ERROR: true, mensage: "Error #2 en el servidor"});
         }
     })(req, res, next);
     
@@ -74,7 +78,8 @@ rutas.get('/salir', (req, res, next)=>{
     /*Metod req.logOut añadido por defecto por passport
     para eliminar la sesion activa en el momento */
     req.logOut();
-    return res.redirect('/');
+    console.log('Sesion cerrada');
+    return res.status(200).send({OK: true});
 });
 
 

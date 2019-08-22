@@ -9,10 +9,10 @@ const app = new express();
 require('./baseDatos');
 require('./autenticacion/local');
 
-app.set('puerto', process.env.PORT || 3000);
+app.set('puerto', process.env.PORT || 3500);
 
 app.use(bodyParse.urlencoded({extended: false}));
-
+app.use(express.json());
 /*
 Configuración de la sesion.
 */
@@ -33,6 +33,16 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+// SOLO EN MODO DEV, EN PRODUCCIÓN BORRAR ESTO!!
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
+
 
 app.use('/', rutas);
 
